@@ -1,0 +1,164 @@
+ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
+    </div>
+  </header>
+  <div class="warnbar" id="warnbar"><div class="icon">⚠</div><div><b>Agosto/26 está incompleto e foi excluído do resultado.</b><p id="warnText"></p></div></div>
+
+  <section id="visao">
+    <div class="grid-top">
+      <div class="card scorecard">
+        <div class="card-label">Índice de Saúde</div>
+        <div class="gauge" id="gauge"><div class="gauge-inner"><b id="score">—</b><small>/100</small></div></div>
+        <div class="score-status" id="scoreStatus">—</div><div class="score-help">índice gerencial transparente</div>
+      </div>
+      <div class="card kpi"><label>Receita Líquida</label><div class="value" id="kpiNet">—</div><div class="delta" id="kpiNetDelta">—</div><div class="detail" id="kpiNetDetail"></div><div class="spark" id="sparkNet"></div></div>
+      <div class="card kpi"><label>LL / PJ</label><div class="value" id="kpiProfit">—</div><div class="delta" id="kpiProfitDelta">—</div><div class="detail" id="kpiProfitDetail"></div><div class="spark" id="sparkProfit"></div></div>
+      <div class="card kpi"><label>Margem Líquida</label><div class="value" id="kpiMargin">—</div><div class="delta" id="kpiMarginDelta">—</div><div class="detail">LL sobre Receita Líquida</div><div class="spark" id="sparkMargin"></div></div>
+      <div class="card kpi"><label>CMV</label><div class="value" id="kpiCmv">—</div><div class="delta" id="kpiCmvDelta">—</div><div class="detail">CMV sobre Receita Líquida</div><div class="spark" id="sparkCmv"></div></div>
+      <div class="card kpi"><label>Ponto de Equilíbrio</label><div class="value" id="kpiPe">—</div><div class="delta" id="kpiPeDelta">—</div><div class="detail" id="kpiPeDetail"></div><div class="spark" id="sparkPe"></div></div>
+    </div>
+
+    <div class="grid-main">
+      <div class="panel" id="evolucao">
+        <div class="panel-head"><div><h2>EVOLUÇÃO FINANCEIRA</h2><p>Todos os indicadores abaixo usam exatamente o mesmo período selecionado.</p></div><span class="badge" id="periodBadge"></span></div>
+        <div class="plot plot-main" id="mainChart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h2>O QUE ESTÁ ACONTECENDO?</h2><p>Diagnóstico gerado a partir dos números do período.</p></div></div>
+        <div class="insights" id="insights"></div>
+        <div class="mini-status" id="miniStatus"></div>
+        <div class="details"><details><summary>Como o Índice de Saúde é calculado?</summary><div>Rentabilidade (25 pts), CMV (20 pts), peso dos custos fixos (20 pts), evolução da receita (20 pts) e consistência de meses lucrativos (15 pts). É um indicador gerencial para leitura rápida; a DRE continua sendo a referência numérica.</div></details></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="custos" class="section">
+    <div class="grid-3">
+      <div class="panel">
+        <div class="panel-head"><div><h2>COMPOSIÇÃO DOS CUSTOS</h2><p>Participação sobre as despesas totais do período.</p></div></div>
+        <div class="plot plot-donut" id="costDonut"></div>
+        <div class="cost-kpis" id="costKpis"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h2>PRESSÃO SOBRE A RECEITA</h2><p>Margem, CMV, Fixo e Variável — todos sobre Receita Líquida.</p></div></div>
+        <div class="plot plot-ratio" id="ratioChart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h2>ÚLTIMO MÊS DO PERÍODO</h2><p id="lastMonthLabel"></p></div></div>
+        <div id="lastMonthBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="detalhes" class="section">
+    <div class="grid-bottom">
+      <div class="panel"><div class="panel-head"><div><h2>GRUPOS DE DESPESAS — TOP 8</h2><p>Onde o dinheiro está concentrado.</p></div></div><div class="list" id="groupList"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>FORNECEDORES — TOP 8</h2><p>Maiores valores lançados no período.</p></div></div><div class="list" id="supplierList"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>MIX DE RECEBIMENTOS</h2><p>Composição acumulada do período.</p></div></div><div class="plot plot-pay" id="payChart"></div></div>
+    </div>
+  </section>
+
+  <section id="dre" class="section">
+    <div class="panel dre-full">
+      <div class="panel-head"><div><h2>DRE COMPLETA — MENSAL</h2><p>Todos os meses do período selecionado, com acumulado. Esta é a visão principal da DRE.</p></div><span class="badge" id="drePeriodBadge"></span></div>
+      <div class="dre-wrap"><table class="dre dre-matrix" id="dreMonthlyTable"></table></div>
+      <div class="dre-note">Receita Líquida = Receita Bruta menos deduções/taxas. Lucro Bruto = Receita Líquida menos CMV. LL/PJ = Receita Líquida menos Custos Fixos, CMV e Despesas Variáveis. Percentuais gerenciais são calculados sobre a Receita Líquida.</div>
+    </div>
+    <div class="grid-bottom">
+      <div class="panel"><div class="panel-head"><div><h2>DRE ACUMULADA — PERÍODO</h2><p id="dreCompareText"></p></div></div><div class="dre-wrap"><table class="dre" id="dreTable"></table></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>MAPA MENSAL</h2><p>Receita, LL/PJ e % LL por mês.</p></div></div><div class="heatmap" id="monthMap"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>LEITURA DO PONTO DE EQUILÍBRIO</h2><p>Folga do último mês em relação ao necessário para cobrir os custos fixos.</p></div></div><div id="peBox"></div></div>
+    </div>
+  </section>
+  <div class="footer">Fonte: <span id="footerSource"></span> • O painel considera somente meses fechados com Receita e Despesas reconciliadas.</div>
+</main>
+<nav class="mobile-nav"><a href="#visao">Visão</a><a href="#evolucao">Evolução</a><a href="#custos">Custos</a><a href="#detalhes">Detalhes</a><a href="#dre">DRE</a></nav>
+</div>
+<script src="https://cdn.plot.ly/plotly-3.3.1.min.js" charset="utf-8"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>
+let DATA=null;
+let months=[];
+let byKey={};
+const EXCEL_PATH='data/ESTRUTURA_JANELA.xlsx';
+const CMV_GROUPS=new Set(['CERVEJA','DRINK','COMIDA','EMBALAGEM','SOFT DRINK','CIGARRO']);
+const PT_MONTHS={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
+function safeFloat(v){
+  if(v==null||v==='')return 0;
+  if(typeof v==='number')return Number.isFinite(v)?v:0;
+  if(typeof v==='string'){
+    let x=v.trim(); if(!x)return 0;
+    if(x.includes(',') && x.includes('.')) x=x.replace(/\./g,'').replace(',','.');
+    else if(x.includes(',')) x=x.replace(',','.');
+    const n=Number(x); return Number.isFinite(n)?n:0;
+  }
+  const n=Number(v); return Number.isFinite(n)?n:0;
+}
+function excelDate(v){
+  if(v instanceof Date && !isNaN(v))return v;
+  if(typeof v==='number' && window.XLSX?.SSF){
+    const p=XLSX.SSF.parse_date_code(v);
+    if(p)return new Date(p.y,p.m-1,p.d,p.H||0,p.M||0,p.S||0);
+  }
+  if(typeof v==='string'){
+    const m=v.trim().match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+    if(m){let y=+m[3]; if(y<100)y+=2000; return new Date(y,+m[2]-1,+m[1]);}
+    const d=new Date(v); if(!isNaN(d))return d;
+  }
+  return null;
+}
+function monthKeyFromLabel(v){
+  if(v instanceof Date&&!isNaN(v))return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}`;
+  const s=String(v??'').trim();
+  const m=s.match(/^([A-Za-zÀ-ÿ]{3})\s*[\/-]\s*(\d{2,4})$/i); if(!m)return '';
+  const mo=PT_MONTHS[m[1].normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()]; if(!mo)return '';
+  let y=+m[2]; if(y<100)y+=2000; return `${y}-${String(mo).padStart(2,'0')}`;
+}
+function monthLabel(key){const [y,m]=key.split('-').map(Number);const n=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return `${n[m-1]}/${String(y).slice(-2)}`}
+function dateBR(d){return d?new Intl.DateTimeFormat('pt-BR').format(d):'—'}
+function objAdd(map,key,sub,val){if(!map[key])map[key]={};map[key][sub]=(map[key][sub]||0)+safeFloat(val)}
+function sortedNested(o){const out={};for(const [k,v] of Object.entries(o))out[k]=Object.fromEntries(Object.entries(v).sort((a,b)=>b[1]-a[1]));return out}
+function parseWorkbook(wb){
+  const need=['SINTETICO','Receitas','Despesas']; for(const n of need)if(!wb.Sheets[n])throw new Error(`Aba obrigatória não encontrada: ${n}`);
+  const arr=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:false});
+  const monthsOut=[];
+  for(const r of arr('SINTETICO').slice(6)){
+    const key=monthKeyFromLabel(r[1]); if(!key)continue;
+    monthsOut.push({key,label:String(r[1]??monthLabel(key)),gross:safeFloat(r[2]),net:safeFloat(r[3]),fixed:safeFloat(r[5]),cmv:safeFloat(r[6]),variable:safeFloat(r[7]),expenses:safeFloat(r[8]),profit:safeFloat(r[9]),mkp:safeFloat(r[12]),contrib:safeFloat(r[13]),breakeven:safeFloat(r[14])});
+  }
+  monthsOut.sort((a,b)=>a.key.localeCompare(b.key));
+  const receipts={},groups={},suppliers={}; let latestReceipt=null,latestExpense=null;
+  for(const r of arr('Receitas').slice(3)){
+    const dt=excelDate(r[0]); if(!dt)continue; const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    const vals={debit:safeFloat(r[4]),credit:safeFloat(r[5]),voucher:safeFloat(r[6]),pix:safeFloat(r[7]),delivery:safeFloat(r[8]),cash:safeFloat(r[14]),gross:safeFloat(r[15]),net:safeFloat(r[16])};
+    if(Object.values(vals).some(v=>v!==0)){for(const [k,v] of Object.entries(vals))objAdd(receipts,key,k,v);if(!latestReceipt||dt>latestReceipt)latestReceipt=dt;}
+  }
+  for(const r of arr('Despesas').slice(1)){
+    let dt=excelDate(r[1]); let key=dt?`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`:monthKeyFromLabel(r[17]); if(!key)continue;
+    const total=safeFloat(r[13]); const group=String(r[6]||'SEM GRUPO').trim()||'SEM GRUPO'; const supplier=String(r[7]||'SEM FORNECEDOR').trim()||'SEM FORNECEDOR';
+    objAdd(groups,key,group,total); objAdd(suppliers,key,supplier,total); if(dt&&(!latestExpense||dt>latestExpense))latestExpense=dt;
+  }
+  if(!monthsOut.length)throw new Error('A aba SINTETICO não possui meses reconhecíveis a partir da linha 7.');
+  return {source:'ESTRUTURA_JANELA.xlsx • leitura direta do GitHub',generatedAt:new Date().toLocaleString('pt-BR'),months:monthsOut,receipts,groups:sortedNested(groups),suppliers:sortedNested(suppliers),latestReceipt:dateBR(latestReceipt),latestExpense:dateBR(latestExpense)};
+}
+async function loadDataFromExcel(){
+  if(!window.XLSX)throw new Error('Biblioteca de leitura do Excel não carregou.');
+  const res=await fetch(`${EXCEL_PATH}?v=${Date.now()}`,{cache:'no-store'}); if(!res.ok)throw new Error(`Não foi possível abrir ${EXCEL_PATH} (HTTP ${res.status}).`);
+  const buf=await res.arrayBuffer(); const wb=XLSX.read(buf,{type:'array',cellDates:true,cellFormula:true}); return parseWorkbook(wb);
+}
+function showLoadError(err){
+  const msg=String(err?.message||err); document.body.innerHTML=`<main style="max-width:820px;margin:70px auto;padding:28px;font-family:Inter,Segoe UI,sans-serif;color:#e7eef7;background:#0d1b2a;border:1px solid #2c4054;border-radius:18px"><h1 style="margin-top:0">Não foi possível carregar a base financeira</h1><p style="color:#a9bac9;line-height:1.6">O painel tentou ler <b>${EXCEL_PATH}</b> diretamente do repositório, mas encontrou um erro.</p><pre style="white-space:pre-wrap;background:#07131f;padding:14px;border-radius:10px;color:#ffb4ad">${msg.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre><p style="color:#a9bac9">Confirme que o arquivo existe na pasta <b>data</b> com o nome <b>ESTRUTURA_JANELA.xlsx</b>.</p></main>`;
+}
+
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=(n,d=0)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:d,maximumFractionDigits:d}).format(Number(n)||0);
+const pct=(n,d=1)=>new Intl.NumberFormat('pt-BR',{style:'percent',minimumFractionDigits:d,maximumFractionDigits:d}).format(Number(n)||0);
+const num=(n,d=1)=>new Intl.NumberFormat('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(Number(n)||0);
+const compact=n=>{const v=Number(n)||0,a=Math.abs(v);if(a>=1e6)return (v<0?'-':'')+'R$ '+num(a/1e6,1)+' mi';if(a>=1e3)return (v<0?'-':'')+'R$ '+num(a/1e3,0)+' mil';return money(v,0)};
+const sum=(rows,k)=>rows.reduce((s,r)=>s+(Number(r[k])||0),0);
+const idx=k=>months.findIndex(x=>x.key===k);
+const plotCfg={displayModeBar:false,responsive:true,scrollZoom:false};
+const plotBase={paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{family:'Inter, Segoe UI, sans-serif',color:'#aebdcc',size:10},margin:{l:58,r:18,t:55,b:42},hovermode:'x unified',hoverlabel:{bgcolor:'#07131f',bordercolor:'#31506b',font:{color:'#fff',size:11}},separators:',.',legend:{orientation:'h',x:0,y:1.13,xanchor:'left',yanchor:'top',font:{size:10,color:'#c6d3df'},bgcolor:'rgba(0,0,0,0)'},xaxis:{showgrid:false,zeroline:false,tickfont:{color:'#7f94a7'},fixedrange:true},yaxis:{gridcolor:'rgba(45,74,101,.42)',zerolinecolor:'rgba(120,145,165,.55)',tickfont:{color:'#7f94a7'},fixedrange:true,tickprefix:'R$ ',tickformat:',.0f'}};
+function cssVar(name){return getComputedStyle(document.body).getPropertyValue(name).trim()}
+function isLight(){return document.body.classList.contains('light')}
+function syncPlotTheme(){const muted=cssVar('--muted'),text=cssVar('--text'),line=cssVar('--line'),panel=cssVar('--panel');plotBase.font.color=muted;plotBase.hoverlabel.bgcolor=isLight()?'#ffffff':'#07131f';plotBase.hoverlabel.bordercolor=line;plotBase.hoverlabel.font.color=text;plotBase.legend.font.color=muted;plotBase.xaxis.tickfont.color=muted;plotBase.yaxis.tickfont.color=muted;plotBase.yaxis.gridcolor=isLight()?'rgba(80,105,130,.18)':'rgba(45,74,101,.42)';plotBase.yaxis.zerolinecolor=isLight()?'rgba(80,105,130,.38)':'rgba(120,145,165,.55)';return {muted,text,line,panel}}
+function applyTheme(theme,rerender=true){document.body.classList.toggle('light',
