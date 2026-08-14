@@ -3,67 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Janela • Carregando painel financeiro</title>
+<title>Janela • Inteligência Financeira</title>
 <style>
 html,body{margin:0;min-height:100%;background:#06111c;color:#f5f8fb;font-family:Inter,Segoe UI,Arial,sans-serif}main{max-width:760px;margin:12vh auto;padding:32px}.box{background:#0c1b2a;border:1px solid #20364b;border-radius:18px;padding:28px;box-shadow:0 18px 48px rgba(0,0,0,.25)}h1{margin:0 0 10px;font-size:22px}p{color:#91a6ba;line-height:1.6}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2bd47d;margin-right:8px;box-shadow:0 0 0 4px rgba(43,212,125,.12)}pre{white-space:pre-wrap;color:#ffaaa6;background:#081522;padding:12px;border-radius:10px}
 </style>
 </head>
-<body><main><div class="box"><h1><span class="dot"></span>JANELA • Inteligência Financeira</h1><p>Carregando o painel e a base financeira do repositório...</p><div id="err"></div></div></main>
+<body><main><div class="box"><h1><span class="dot"></span>JANELA • Inteligência Financeira</h1><p>Carregando o painel e a base financeira...</p><div id="err"></div></div></main>
 <script>
 (async()=>{
+  const fail=(e)=>{console.error(e);document.body.innerHTML='<main><div class="box"><h1>Erro ao carregar o painel</h1><pre>'+String(e?.message||e).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</pre><p>Atualize a página com Ctrl+F5. Se persistir, envie uma captura desta tela.</p></div></main>'};
   try{
     const parts=['.build/index.part01','.build/index.part02','.build/index.part03','.build/index.part04'];
     const texts=[];
-    for(const p of parts){
-      const r=await fetch(p+'?v='+Date.now(),{cache:'no-store'});
-      if(!r.ok)throw new Error('Falha ao carregar '+p+' (HTTP '+r.status+')');
-      texts.push(await r.text());
-    }
-    let app='<!doctype html>\n<html lang="pt-BR">\n'+texts.join('');
-    app=app.replaceAll("data/ESTRUTURA_JANELA.xlsx","./ESTRUTURA%20JANELA_V02.xlsx");
+    for(const p of parts){const r=await fetch(p+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar '+p+' (HTTP '+r.status+')');texts.push(await r.text())}
+    let app='<!doctype html><html lang="pt-BR">'+texts.join('');
+    app=app.replaceAll("data/ESTRUTURA_JANELA.xlsx","ESTRUTURA JANELA_V02.xlsx");
     app=app.replaceAll("ESTRUTURA_JANELA.xlsx • leitura direta do GitHub","ESTRUTURA JANELA_V02.xlsx • leitura direta do GitHub");
     app=app.replaceAll("na pasta <b>data</b> com o nome <b>ESTRUTURA_JANELA.xlsx</b>","na raiz do repositório com o nome <b>ESTRUTURA JANELA_V02.xlsx</b>");
-
-    const scripts=[];
-    app=app.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi,(full,attrs,code)=>{
-      const m=attrs.match(/\bsrc=["']([^"']+)["']/i);
-      scripts.push({src:m?m[1]:null,code});
-      return '';
-    });
-
+    app=app.replace("window.addEventListener('DOMContentLoaded',init);","if(document.readyState==='loading') window.addEventListener('DOMContentLoaded',init); else init();");
     const parsed=new DOMParser().parseFromString(app,'text/html');
-    document.title=parsed.title;
+    const scripts=[...parsed.querySelectorAll('script')];
+    scripts.forEach(s=>s.remove());
     document.head.innerHTML=parsed.head.innerHTML;
     document.body.innerHTML=parsed.body.innerHTML;
-
-    const loadScript=src=>new Promise((resolve,reject)=>{
-      const s=document.createElement('script');
-      s.src=src;s.async=false;
-      s.onload=resolve;
-      s.onerror=()=>reject(new Error('Falha ao carregar biblioteca: '+src));
-      document.body.appendChild(s);
-    });
-
-    for(const item of scripts){
-      if(item.src){
-        await loadScript(item.src);
-      }else if(item.code.trim()){
+    for(const old of scripts){
+      await new Promise((resolve,reject)=>{
         const s=document.createElement('script');
-        s.textContent=item.code.replace(/window\.addEventListener\(['"]DOMContentLoaded['"],init\);?/g,'');
-        document.body.appendChild(s);
-      }
+        for(const a of old.attributes)s.setAttribute(a.name,a.value);
+        if(old.src){s.onload=resolve;s.onerror=()=>reject(new Error('Não foi possível carregar '+old.src));s.src=old.src;document.body.appendChild(s)}
+        else{s.textContent=old.textContent;document.body.appendChild(s);resolve()}
+      });
     }
-
-    if(typeof window.init==='function'){
-      await window.init();
-    }else if(typeof init==='function'){
-      await init();
-    }else{
-      throw new Error('O código principal do painel não foi inicializado.');
-    }
-  }catch(e){
-    console.error(e);
-    document.body.innerHTML='<main><div class="box"><h1>Não foi possível carregar o painel</h1><pre>'+String(e?.message||e).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</pre></div></main>';
-  }
+  }catch(e){fail(e)}
 })();
 </script></body></html>
