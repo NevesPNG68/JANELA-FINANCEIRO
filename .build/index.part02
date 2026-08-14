@@ -1,7 +1,6 @@
 ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
     </div>
   </header>
-  <div class="warnbar" id="warnbar"><div class="icon">⚠</div><div><b>Agosto/26 está incompleto e foi excluído do resultado.</b><p id="warnText"></p></div></div>
 
   <section id="visao">
     <div class="grid-top">
@@ -69,7 +68,7 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
       <div class="panel"><div class="panel-head"><div><h2>LEITURA DO PONTO DE EQUILÍBRIO</h2><p>Folga do último mês em relação ao necessário para cobrir os custos fixos.</p></div></div><div id="peBox"></div></div>
     </div>
   </section>
-  <div class="footer">Fonte: <span id="footerSource"></span> • O painel considera somente meses fechados com Receita e Despesas reconciliadas.</div>
+  <div class="footer">Fonte: <span id="footerSource"></span> • O painel considera os meses disponíveis na aba SINTETICO.</div>
 </main>
 <nav class="mobile-nav"><a href="#visao">Visão</a><a href="#evolucao">Evolução</a><a href="#custos">Custos</a><a href="#detalhes">Detalhes</a><a href="#dre">DRE</a></nav>
 </div>
@@ -115,6 +114,8 @@ function monthKeyFromLabel(v){
 }
 function monthLabel(key){const [y,m]=key.split('-').map(Number);const n=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return `${n[m-1]}/${String(y).slice(-2)}`}
 function dateBR(d){return d?new Intl.DateTimeFormat('pt-BR').format(d):'—'}
+function monthKeyFromDate(d){return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`:''}
+function isPartialDate(d){return !!d&&d.getDate()<new Date(d.getFullYear(),d.getMonth()+1,0).getDate()}
 function objAdd(map,key,sub,val){if(!map[key])map[key]={};map[key][sub]=(map[key][sub]||0)+safeFloat(val)}
 function sortedNested(o){const out={};for(const [k,v] of Object.entries(o))out[k]=Object.fromEntries(Object.entries(v).sort((a,b)=>b[1]-a[1]));return out}
 function parseWorkbook(wb){
@@ -138,7 +139,9 @@ function parseWorkbook(wb){
     objAdd(groups,key,group,total); objAdd(suppliers,key,supplier,total); if(dt&&(!latestExpense||dt>latestExpense))latestExpense=dt;
   }
   if(!monthsOut.length)throw new Error('A aba SINTETICO não possui meses reconhecíveis a partir da linha 7.');
-  return {source:'ESTRUTURA_JANELA.xlsx • leitura direta do GitHub',generatedAt:new Date().toLocaleString('pt-BR'),months:monthsOut,receipts,groups:sortedNested(groups),suppliers:sortedNested(suppliers),latestReceipt:dateBR(latestReceipt),latestExpense:dateBR(latestExpense)};
+  const latestReceiptKey=monthKeyFromDate(latestReceipt),latestExpenseKey=monthKeyFromDate(latestExpense),receiptPartial=isPartialDate(latestReceipt),expensePartial=isPartialDate(latestExpense);
+  for(const month of monthsOut){month.receiptPartial=receiptPartial&&month.key===latestReceiptKey;month.expensePartial=expensePartial&&month.key===latestExpenseKey}
+  return {source:'ESTRUTURA_JANELA.xlsx • leitura direta do GitHub',generatedAt:new Date().toLocaleString('pt-BR'),months:monthsOut,receipts,groups:sortedNested(groups),suppliers:sortedNested(suppliers),latestReceipt:dateBR(latestReceipt),latestExpense:dateBR(latestExpense),receiptPartial,expensePartial};
 }
 async function loadDataFromExcel(){
   if(!window.XLSX)throw new Error('Biblioteca de leitura do Excel não carregou.');
