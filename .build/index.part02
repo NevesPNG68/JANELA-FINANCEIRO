@@ -1,7 +1,6 @@
 ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
     </div>
   </header>
-  <div class="warnbar" id="warnbar"><div class="icon">⚠</div><div><b>Agosto/26 está incompleto e foi excluído do resultado.</b><p id="warnText"></p></div></div>
 
   <section id="visao">
     <div class="grid-top">
@@ -69,7 +68,7 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
       <div class="panel"><div class="panel-head"><div><h2>LEITURA DO PONTO DE EQUILÍBRIO</h2><p>Folga do último mês em relação ao necessário para cobrir os custos fixos.</p></div></div><div id="peBox"></div></div>
     </div>
   </section>
-  <div class="footer">Fonte: <span id="footerSource"></span> • O painel considera somente meses fechados com Receita e Despesas reconciliadas.</div>
+  <div class="footer">Fonte: <span id="footerSource"></span> • O painel considera os meses disponíveis na aba SINTETICO.</div>
 </main>
 <nav class="mobile-nav"><a href="#visao">Visão</a><a href="#evolucao">Evolução</a><a href="#custos">Custos</a><a href="#detalhes">Detalhes</a><a href="#dre">DRE</a></nav>
 </div>
