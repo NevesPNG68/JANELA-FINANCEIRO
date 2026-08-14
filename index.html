@@ -11,11 +11,12 @@ html,body{margin:0;min-height:100%;background:#06111c;color:#f5f8fb;font-family:
 <body><main><div class="box"><h1><span class="dot"></span>JANELA • Inteligência Financeira</h1><p>Carregando o painel e a base financeira...</p><div id="err"></div></div></main>
 <script>
 (async()=>{
-  const fail=(e)=>{console.error(e);document.body.innerHTML='<main><div class="box"><h1>Erro ao carregar o painel</h1><pre>'+String(e?.message||e).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</pre><p>Atualize a página com Ctrl+F5. Se persistir, envie uma captura desta tela.</p></div></main>'};
+  const BUILD='7';
+  const fail=(e)=>{console.error(e);document.body.innerHTML='<main><div class="box"><h1>Erro ao carregar o painel</h1><pre>'+String(e?.message||e).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</pre><p>BUILD '+BUILD+' • envie uma captura desta tela.</p></div></main>'};
   try{
     const parts=['.build/index.part01','.build/index.part02','.build/index.part03','.build/index.part04'];
     const texts=[];
-    for(const p of parts){const r=await fetch(p+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar '+p+' (HTTP '+r.status+')');texts.push(await r.text())}
+    for(const p of parts){const r=await fetch(p+'?build='+BUILD+'&v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar '+p+' (HTTP '+r.status+')');texts.push(await r.text())}
     let app='<!doctype html><html lang="pt-BR">'+texts.join('');
     app=app.replaceAll("data/ESTRUTURA_JANELA.xlsx","ESTRUTURA JANELA_V02.xlsx");
     app=app.replaceAll("ESTRUTURA_JANELA.xlsx • leitura direta do GitHub","ESTRUTURA JANELA_V02.xlsx • leitura direta do GitHub");
@@ -26,6 +27,7 @@ html,body{margin:0;min-height:100%;background:#06111c;color:#f5f8fb;font-family:
     scripts.forEach(s=>s.remove());
     document.head.innerHTML=parsed.head.innerHTML;
     document.body.innerHTML=parsed.body.innerHTML;
+    const badge=document.createElement('div');badge.id='buildBadge';badge.textContent='BUILD '+BUILD;badge.style.cssText='position:fixed;right:8px;bottom:8px;z-index:99999;padding:4px 7px;border-radius:7px;background:#173653;color:#d9ecff;font:700 9px Segoe UI,Arial,sans-serif;border:1px solid #31506b;opacity:.9';document.body.appendChild(badge);
     for(const old of scripts){
       await new Promise((resolve,reject)=>{
         const s=document.createElement('script');
@@ -34,6 +36,13 @@ html,body{margin:0;min-height:100%;background:#06111c;color:#f5f8fb;font-family:
         else{s.textContent=old.textContent;document.body.appendChild(s);resolve()}
       });
     }
+    await new Promise(r=>setTimeout(r,2500));
+    const kpi=document.getElementById('kpiNet');
+    if(kpi && (kpi.textContent.trim()==='—'||kpi.textContent.trim()==='')){
+      if(typeof window.init!=='function')throw new Error('A função init() não ficou disponível após carregar o JavaScript principal.');
+      await window.init();
+    }
+    const badge2=document.getElementById('buildBadge');if(badge2)badge2.textContent='BUILD '+BUILD+' ✓';
   }catch(e){fail(e)}
 })();
 </script></body></html>
