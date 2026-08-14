@@ -1,4 +1,4 @@
-:r=>r.gross,total:t.gross,cls:'section-row'},
+r=>r.gross,total:t.gross,cls:'section-row'},
   {name:'(-) Deduções / Taxas',fn:deductions,total:totalDeductions},
   {name:'RECEITA LÍQUIDA',fn:r=>r.net,total:t.net,cls:'subtotal'},
   {name:'(-) CMV',fn:r=>r.cmv,total:t.cmv},
