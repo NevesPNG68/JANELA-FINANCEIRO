@@ -119,20 +119,20 @@ function objAdd(map,key,sub,val){if(!map[key])map[key]={};map[key][sub]=(map[key
 function sortedNested(o){const out={};for(const [k,v] of Object.entries(o))out[k]=Object.fromEntries(Object.entries(v).sort((a,b)=>b[1]-a[1]));return out}
 function parseWorkbook(wb){
   const need=['SINTETICO','Receitas','Despesas']; for(const n of need)if(!wb.Sheets[n])throw new Error(`Aba obrigatória não encontrada: ${n}`);
-  const arr=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:false});
+  const arr=(n,range)=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:false,range});
   const monthsOut=[];
-  for(const r of arr('SINTETICO').slice(6)){
+  for(const r of arr('SINTETICO',6)){
     const key=monthKeyFromLabel(r[1]); if(!key)continue;
     monthsOut.push({key,label:String(r[1]??monthLabel(key)),gross:safeFloat(r[2]),net:safeFloat(r[3]),fixed:safeFloat(r[5]),cmv:safeFloat(r[6]),variable:safeFloat(r[7]),expenses:safeFloat(r[8]),profit:safeFloat(r[9]),mkp:safeFloat(r[12]),contrib:safeFloat(r[13]),breakeven:safeFloat(r[14])});
   }
   monthsOut.sort((a,b)=>a.key.localeCompare(b.key));
   const receipts={},groups={},suppliers={}; let latestReceipt=null,latestExpense=null;
-  for(const r of arr('Receitas').slice(3)){
+  for(const r of arr('Receitas',3)){
     const dt=excelDate(r[0]); if(!dt)continue; const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
     const vals={debit:safeFloat(r[4]),credit:safeFloat(r[5]),voucher:safeFloat(r[6]),pix:safeFloat(r[7]),delivery:safeFloat(r[8]),cash:safeFloat(r[14]),gross:safeFloat(r[15]),net:safeFloat(r[16])};
     if(Object.values(vals).some(v=>v!==0)){for(const [k,v] of Object.entries(vals))objAdd(receipts,key,k,v);if(!latestReceipt||dt>latestReceipt)latestReceipt=dt;}
   }
-  for(const r of arr('Despesas').slice(1)){
+  for(const r of arr('Despesas',1)){
     let dt=excelDate(r[1]); let key=dt?`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`:monthKeyFromLabel(r[17]); if(!key)continue;
     const total=safeFloat(r[13]); const group=String(r[6]||'SEM GRUPO').trim()||'SEM GRUPO'; const supplier=String(r[7]||'SEM FORNECEDOR').trim()||'SEM FORNECEDOR';
     objAdd(groups,key,group,total); objAdd(suppliers,key,supplier,total); if(dt&&(!latestExpense||dt>latestExpense))latestExpense=dt;
