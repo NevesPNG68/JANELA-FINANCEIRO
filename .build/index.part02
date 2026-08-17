@@ -50,7 +50,7 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
 
   <section id="detalhes" class="section">
     <div class="grid-bottom">
-      <div class="panel"><div class="panel-head"><div><h2>GRUPOS DE DESPESAS — TOP 8</h2><p>Onde o dinheiro está concentrado.</p></div></div><div class="list" id="groupList"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>GRUPOS DE DESPESAS</h2><p id="groupCompareText">Grupos estratégicos no período selecionado.</p></div></div><div class="list" id="groupList"></div></div>
       <div class="panel"><div class="panel-head"><div><h2>FORNECEDORES — TOP 8</h2><p>Maiores valores lançados no período.</p></div></div><div class="list" id="supplierList"></div></div>
       <div class="panel"><div class="panel-head"><div><h2>MIX DE RECEBIMENTOS</h2><p>Composição acumulada do período.</p></div></div><div class="plot plot-pay" id="payChart"></div></div>
     </div>
