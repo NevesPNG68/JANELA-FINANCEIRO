@@ -56,6 +56,12 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
     </div>
   </section>
 
+  <section id="gauss" class="section" aria-labelledby="gaussTitle">
+    <div class="panel-head"><div><h2 id="gaussTitle">DISTRIBUIÇÃO GAUSSIANA — RECEITA LÍQUIDA MENSAL</h2><p id="gaussPeriod">Últimos meses completos da base financeira.</p></div><button type="button" class="gauss-replay" id="gaussReplay">↻ Repetir animação</button></div>
+    <div class="gauss-grid"><article class="panel gauss-card" id="gauss12"></article><article class="panel gauss-card" id="gauss3"></article></div>
+    <p class="gauss-note" id="gaussPartial"></p>
+  </section>
+
   <section id="dre" class="section">
     <div class="panel dre-full">
       <div class="panel-head"><div><h2>DRE COMPLETA — MENSAL</h2><p>Todos os meses do período selecionado, com acumulado. Esta é a visão principal da DRE.</p></div><span class="badge" id="drePeriodBadge"></span></div>
