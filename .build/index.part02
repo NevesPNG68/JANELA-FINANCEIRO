@@ -52,7 +52,7 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
     <div class="grid-bottom">
       <div class="panel"><div class="panel-head"><div><h2>GRUPOS DE DESPESAS</h2><p id="groupCompareText">Grupos estratégicos no período selecionado.</p></div></div><div class="group-summary" id="groupSummary"></div><div class="group-legend"><span><i class="period"></i>Período</span><span><i class="compare"></i>Comparável</span></div><div class="list group-list" id="groupList"></div></div>
       <div class="panel"><div class="panel-head"><div><h2>FORNECEDORES — TOP 8</h2><p>Maiores valores lançados no período.</p></div></div><div class="list" id="supplierList"></div></div>
-      <div class="panel"><div class="panel-head"><div><h2>MIX DE RECEBIMENTOS</h2><p>Composição acumulada do período.</p></div></div><div class="plot plot-pay" id="payChart"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>MIX DE RECEBIMENTOS</h2><p>Composição acumulada do período.</p></div></div><div class="plot plot-pay" id="payChart"></div><div id="receiptsDemo" class="receipts-demo"></div></div>
     </div>
   </section>
 
@@ -136,7 +136,7 @@ function parseWorkbook(wb){
   const receipts={},groups={},suppliers={}; let latestReceipt=null,latestExpense=null;
   for(const r of arr('Receitas',3)){
     const dt=excelDate(r[0]); if(!dt)continue; const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-    const vals={debit:safeFloat(r[4]),credit:safeFloat(r[5]),voucher:safeFloat(r[6]),pix:safeFloat(r[7]),delivery:safeFloat(r[8]),cash:safeFloat(r[14]),gross:safeFloat(r[15]),net:safeFloat(r[16])};
+    const vals={debit:safeFloat(r[4]),credit:safeFloat(r[5]),voucher:safeFloat(r[6]),pix:safeFloat(r[7]),delivery:safeFloat(r[8]),deliveryNet:safeFloat(r[13]),deliveryNetRecords:r[13]!=null&&r[13]!==''?1:0,cash:safeFloat(r[14]),gross:safeFloat(r[15]),net:safeFloat(r[16])};
     if(Object.values(vals).some(v=>v!==0)){for(const [k,v] of Object.entries(vals))objAdd(receipts,key,k,v);if(!latestReceipt||dt>latestReceipt)latestReceipt=dt;}
   }
   for(const r of arr('Despesas',1)){
