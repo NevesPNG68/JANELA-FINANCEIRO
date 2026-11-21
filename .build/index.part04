@@ -67,7 +67,10 @@ function gaussCard(host,rs,count){
  const placed=[],points=rs.map((r,i)=>({r,i})).sort((a,b)=>a.r.net-b.r.net).map(({r})=>{
   const px=x(r.net),py=y(r.net),clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
   const offsets=[[0,-12],[0,18],[38,-12],[-38,-12],[38,18],[-38,18],[0,-30],[0,36],[70,-12],[-70,-12],[38,-30],[-38,-30],[70,18],[-70,18],[0,54]];
-  const candidates=offsets.map(([dx,dy])=>({x:clamp(px+dx,left+24,width-right-24),y:clamp(py+dy,43,bottom-4)}));
+  const axisLeft=left+24,axisRight=width-right-24,meanX=x(mean),gap=30;
+  const labelMin=r.net>mean+.005?Math.min(axisRight,meanX+gap):axisLeft;
+  const labelMax=r.net<mean-.005?Math.max(axisLeft,meanX-gap):axisRight;
+  const candidates=offsets.map(([dx,dy])=>({x:clamp(px+dx,labelMin,labelMax),y:clamp(py+dy,43,bottom-4)}));
   const score=p=>placed.reduce((n,q)=>n+(Math.abs(p.x-q.x)<48&&Math.abs(p.y-q.y)<14?1000:0),0)+Math.abs(p.x-px)*.15+Math.abs(p.y-py);
   const label=candidates.reduce((best,p)=>score(p)<score(best)?p:best,candidates[0]);
   placed.push(label);
