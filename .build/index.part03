@@ -60,7 +60,9 @@ function renderReceiptsDemo(rs,cr){
 function renderSupplierRevenue(rs,cr){
  const host=$('#supplierRevenue');
  host.innerHTML='<h3>IFOOD · VENDAS BRUTAS MENSAIS</h3><div id="supplierRevenueLine" class="small-revenue-chart"></div><p class="channel-note">Comparação dos valores brutos de delivery da planilha.</p>';
- const x=rs.map(r=>r.label),trace=(list,name,col)=>({type:'scatter',mode:'lines+markers',name,x,y:list.map(r=>{const v=DATA.receipts[r.key];return v?v.delivery:null}),customdata:list.map(r=>r.label),line:{color:col,width:2},marker:{size:5},connectgaps:false,hovertemplate:'%{customdata}<br>R$ %{y:,.2f}<extra>'+name+'</extra>'});
+ const x=rs.map(r=>r.label),value=r=>r&&DATA.receipts[r.key]?DATA.receipts[r.key].delivery:null;
+ const evolution=rs.map((r,i)=>{const current=value(r),previous=value(cr[i]);if(current==null||previous==null||previous===0)return 'Sem base comparável';const d=current/previous-1;return (d>0?'+':'')+pct(d,2)});
+ const trace=(list,name,col)=>({type:'scatter',mode:'lines+markers',name,x,y:list.map(value),customdata:list.map((r,i)=>[r.label,evolution[i]]),line:{color:col,width:2},marker:{size:5},connectgaps:false,hovertemplate:'%{customdata[0]}<br>R$ %{y:,.2f}<br>Evolução do período: %{customdata[1]}<extra>'+name+'</extra>'});
  const layout={...plotBase,margin:{l:52,r:8,t:5,b:49},height:170,legend:{orientation:'h',x:0,y:-.32,font:{size:9,color:cssVar('--muted')}},xaxis:{...plotBase.xaxis,type:'category',tickangle:rs.length>7?-35:0,tickfont:{size:9,color:cssVar('--muted')}},yaxis:{...plotBase.yaxis,tickprefix:'R$ ',tickformat:'~s',tickfont:{size:9,color:cssVar('--muted')}}};
  Plotly.react('supplierRevenueLine',[trace(rs,'Período',cssVar('--blue')),...(cr.length?[trace(cr,'Comparável',cssVar('--amber'))]:[])],layout,plotCfg);
 }
