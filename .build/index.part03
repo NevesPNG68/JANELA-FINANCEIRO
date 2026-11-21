@@ -59,8 +59,8 @@ function renderReceiptsDemo(rs,cr){
 }
 function renderSupplierRevenue(rs,cr){
  const host=$('#supplierRevenue');
- host.innerHTML='<h3>RECEITA LÍQUIDA MENSAL · COMPARAÇÃO</h3><div id="supplierRevenueLine" class="small-revenue-chart"></div>';
- const x=rs.map(r=>r.label),trace=(list,name,col)=>({type:'scatter',mode:'lines+markers',name,x,y:list.map(r=>r.net),customdata:list.map(r=>r.label),line:{color:col,width:2},marker:{size:5},connectgaps:false,hovertemplate:'%{customdata}<br>R$ %{y:,.2f}<extra>'+name+'</extra>'});
+ host.innerHTML='<h3>IFOOD · REPASSES LÍQUIDOS MENSAIS</h3><div id="supplierRevenueLine" class="small-revenue-chart"></div><p class="channel-note">Repasses registrados no mês; podem se referir a vendas de outros períodos.</p>';
+ const x=rs.map(r=>r.label),trace=(list,name,col)=>({type:'scatter',mode:'lines+markers',name,x,y:list.map(r=>{const v=DATA.receipts[r.key];return v&&v.deliveryNetRecords?v.deliveryNet:null}),customdata:list.map(r=>r.label),line:{color:col,width:2},marker:{size:5},connectgaps:false,hovertemplate:'%{customdata}<br>R$ %{y:,.2f}<extra>'+name+'</extra>'});
  const layout={...plotBase,margin:{l:52,r:8,t:5,b:49},height:170,legend:{orientation:'h',x:0,y:-.32,font:{size:9,color:cssVar('--muted')}},xaxis:{...plotBase.xaxis,type:'category',tickangle:rs.length>7?-35:0,tickfont:{size:9,color:cssVar('--muted')}},yaxis:{...plotBase.yaxis,tickprefix:'R$ ',tickformat:'~s',tickfont:{size:9,color:cssVar('--muted')}}};
  Plotly.react('supplierRevenueLine',[trace(rs,'Período',cssVar('--blue')),...(cr.length?[trace(cr,'Comparável',cssVar('--amber'))]:[])],layout,plotCfg);
 }
