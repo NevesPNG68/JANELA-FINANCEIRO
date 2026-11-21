@@ -70,7 +70,7 @@ ema claro/escuro" aria-label="Alternar tema claro/escuro">☀</button>
     </div>
     <div class="grid-bottom">
       <div class="panel"><div class="panel-head"><div><h2>DRE ACUMULADA — PERÍODO</h2><p id="dreCompareText"></p></div></div><div class="dre-wrap"><table class="dre" id="dreTable"></table></div></div>
-      <div class="panel"><div class="panel-head"><div><h2>MAPA MENSAL</h2><p>Receita, LL/PJ e % LL por mês.</p></div></div><div class="heatmap" id="monthMap"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>MAPA MENSAL</h2><p>Receita, LL/PJ e % LL por mês.</p></div></div><div class="heatmap" id="monthMap"></div><div class="month-legend" aria-label="Faixas de margem líquida"><span><i style="background:#2bd47d"></i>10% ou mais</span><span><i style="background:#1683d6"></i>5% a menos de 10%</span><span><i style="background:#d1a400"></i>0% a menos de 5%</span><span><i style="background:#ff5d58"></i>Prejuízo</span></div></div>
       <div class="panel"><div class="panel-head"><div><h2>LEITURA DO PONTO DE EQUILÍBRIO</h2><p>Folga do último mês em relação ao necessário para cobrir os custos fixos.</p></div></div><div id="peBox"></div></div>
     </div>
   </section>
